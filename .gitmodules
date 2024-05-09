@@ -1,0 +1,3 @@
+[submodule "bashLibraries"]
+	path = bashLibraries
+	url = git@github.com:disoardi/bashLibraries.git
