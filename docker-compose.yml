@@ -52,6 +52,22 @@ services:
     networks:
       - net
 
+  open-webui:
+    image: ghcr.io/open-webui/open-webui:main
+    environment:
+      - OLLAMA_BASE_URL=${OLLAMA_BASE_URL}
+    ports:
+      - ${OPEN_WEBUI_PORT-3000}:8080
+    volumes:
+      - open-webui:/app/backend/data
+    networks:
+      - net
+    depends_on:
+      pull-model:
+        condition: service_completed_successfully
+
+
+
   loader:
     build:
       context: .
@@ -246,3 +262,4 @@ networks:
 
 volumes:
   data:
+  open-webui:
