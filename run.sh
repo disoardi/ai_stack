@@ -25,7 +25,7 @@ source "${SCRIPT_PATH}/bashLibraries/dockerLibs.sh"
 # 6 is debug mode
 export verbosity=6
 
-listOfExecution="deploy,list"
+listOfExecution="deploy,list,jupyter"
 
 declare listOfExtTools=(
   "docker"
@@ -46,6 +46,7 @@ function fnUsage(){
     echo "-e has the following options:"
     echo -e "\tdeploy \t\t\tRun all service in docker-compose file"
     echo -e "\tlist   \t\t\tShow all services and all mapped properties"
+    echo -e "\tjupyter\t\t\tRun only jupyter and ignore -f specification"
 }
 
 # Eseguita quando exit in modo da lasciare la shell pulita
@@ -65,6 +66,12 @@ function fnCheckDependencies() {
     fi
   done
 }
+
+# function tu run docker with local path parameters
+function fnRunJupyter() {
+  docker run -it --rm -p 10000:8888 -v "${PWD}":/home/jovyan/work quay.io/jupyter/datascience-notebook:latest
+}
+
 
 #############################################
 #                                           #
@@ -155,3 +162,10 @@ if [[ "${execution,,}" == "list" ]]; then
     fnListServices "${DFPath}"
     exit 0
 fi
+
+if [[ "${execution,,}" == "jupyter" ]]; then
+    einfo "Run only jupyter services:"
+    fnRunJupyter
+    exit 0
+fi
+
