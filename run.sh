@@ -25,7 +25,7 @@ source "${SCRIPT_PATH}/bashLibraries/dockerLibs.sh"
 # 6 is debug mode
 export verbosity=6
 
-listOfExecution="deploy,list,jupyter"
+listOfExecution="deploy,list,base"
 
 declare listOfExtTools=(
   "docker"
@@ -46,7 +46,7 @@ function fnUsage(){
     echo "-e has the following options:"
     echo -e "\tdeploy \t\t\tRun all service in docker-compose file"
     echo -e "\tlist   \t\t\tShow all services and all mapped properties"
-    echo -e "\tjupyter\t\t\tRun only jupyter and ignore -f specification"
+    echo -e "\tbase   \t\t\tRun only OLLAMA and onu-ui without GPU"
 }
 
 # Eseguita quando exit in modo da lasciare la shell pulita
@@ -69,7 +69,7 @@ function fnCheckDependencies() {
 
 # function tu run docker with local path parameters
 function fnRunJupyter() {
-  docker run -it --rm -p 10000:8888 -v "${PWD}":/home/jovyan/work quay.io/jupyter/datascience-notebook:latest
+  docker run -it --rm -p 8888:8888 -v "${PWD}":/home/jovyan/work quay.io/jupyter/datascience-notebook:latest
 }
 
 
@@ -163,9 +163,9 @@ if [[ "${execution,,}" == "list" ]]; then
     exit 0
 fi
 
-if [[ "${execution,,}" == "jupyter" ]]; then
-    einfo "Run only jupyter services:"
-    fnRunJupyter
+if [[ "${execution,,}" == "base" ]]; then
+    einfo "Run base without GPU services."
+    docker compose --profile linux -f ${DFPath} --env-file ${PropertiesFile} up
     exit 0
 fi
 
