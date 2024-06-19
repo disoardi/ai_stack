@@ -25,7 +25,7 @@ source "${SCRIPT_PATH}/bashLibraries/dockerLibs.sh"
 # 6 is debug mode
 export verbosity=6
 
-listOfExecution="deploy,list,base,jupyter"
+listOfExecution="deploy,list,ollama,jupyter,one-ui"
 
 declare listOfExtTools=(
   "docker"
@@ -46,7 +46,7 @@ function fnUsage(){
     echo "-e has the following options:"
     echo -e "\tdeploy \t\t\tRun all service in docker-compose file"
     echo -e "\tlist   \t\t\tShow all services and all mapped properties"
-    echo -e "\tbase   \t\t\tRun only OLLAMA and onu-ui without GPU"
+    echo -e "\tollama   \t\t\tRun only OLLAMA and onu-ui without GPU"
 }
 
 # Eseguita quando exit in modo da lasciare la shell pulita
@@ -163,15 +163,21 @@ if [[ "${execution,,}" == "list" ]]; then
     exit 0
 fi
 
-if [[ "${execution,,}" == "base" ]]; then
+if [[ "${execution,,}" == "ollama" ]]; then
     einfo "Run base without GPU services."
-    docker compose --profile linux -f ${DFPath} --env-file ${PropertiesFile} up
+    docker-compose --profile linux -f ${DFPath} --env-file ${PropertiesFile} up
     exit 0
 fi
 
 if [[ "${execution,,}" == "jupyter" ]]; then
     einfo "Run jupyter notebook."
-    docker compose -f ${DFPath} up
+    docker-compose -f ${DFPath} up
+    exit 0
+fi
+
+if [[ "${execution,,}" == "one-ui" ]]; then
+    einfo "Run one-ui notebook."
+    docker-compose -f ${DFPath} up
     exit 0
 fi
 

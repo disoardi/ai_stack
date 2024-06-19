@@ -1,0 +1,16 @@
+services:
+
+# webui, nagivate to http://localhost:3000/ to use
+  open-webui:
+    image: ghcr.io/open-webui/open-webui:main
+    container_name: open-webui
+    volumes:
+      - open-webui:/app/backend/data
+    ports:
+      - 3000:8080
+    extra_hosts:
+      - host.docker.internal:host-gateway
+    restart: unless-stopped
+
+volumes:
+  open-webui: {}
