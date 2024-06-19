@@ -25,7 +25,7 @@ source "${SCRIPT_PATH}/bashLibraries/dockerLibs.sh"
 # 6 is debug mode
 export verbosity=6
 
-listOfExecution="deploy,list,base"
+listOfExecution="deploy,list,base,jupyter"
 
 declare listOfExtTools=(
   "docker"
@@ -166,6 +166,12 @@ fi
 if [[ "${execution,,}" == "base" ]]; then
     einfo "Run base without GPU services."
     docker compose --profile linux -f ${DFPath} --env-file ${PropertiesFile} up
+    exit 0
+fi
+
+if [[ "${execution,,}" == "jupyter" ]]; then
+    einfo "Run jupyter notebook."
+    docker compose -f ${DFPath} up
     exit 0
 fi
 
