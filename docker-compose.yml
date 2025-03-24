@@ -6,6 +6,7 @@ services:
     command:
       - "--api.insecure=true"
       - "--providers.docker=true"
+      - "--log.level=DEBUG"
       - "--entrypoints.web.address=:80"
     ports:
       - "80:80"
@@ -15,6 +16,7 @@ services:
     networks:
       - perplexica-net
       - open-webui-net
+      - default_compose
     restart: unless-stopped
 
 # Perplexica
@@ -90,6 +92,8 @@ services:
 networks:
   perplexica-net:
   open-webui-net:
+  default_compose:
+    external: true
 
 
 volumes:
